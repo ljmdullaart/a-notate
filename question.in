@@ -1,0 +1,52 @@
+.h1 Origin
+
+This script is written after a question apeared on Stack Exchange.
+
+.link https://unix.stackexchange.com/questions/524884/annotating-any-files
+
+I have had this problem for a very long time, had several discussions with
+friends, and tried searching relating info online. All efforts were in
+vain so I decide to give a shot here.
+
+I have lots of files that I would like to annotate. Not necessarily are
+they pictures or documents, but also audio/video files. Now, I understand
+that there are ways to annotate a PDF, and there are ways to add metadata
+to PDF/mp3/mp4.., but those methods are not enough for me.
+
+More specifically, when it comes to PDF files, usually I would like to
+take some notes in my favorite format. The current best way I can think
+of is to create another file with the same name and put them in the same
+directory (or tar them together), e.g. Learn-How-to-Learn.pdf Learn-Ho
+-to-Learn.pdf.note.md. However, I found this method cumbersome, for instance
+it is hard to always link them together and with their names synced.
+
+When it comes to mp3/mp4 files, I also want to link them to other files
+that contain my notes. For example,
+
+.pre
+00:45:37,I would like to listen to this part again,20190610T19:03:56
+01:03:55,Donald Knuth made a good point on blah blah,20190610T20:00:03
+.pre
+
+These examples go on and on.. I feel that this is very useful, and there
+must be some clever solutions out there. But to my surprise, I haven't
+found any! Please let me know if I should be clearer.. sincerely I would
+like to have a beautiful solution. Thank you in advance!
+
+.h1 Manual
+
+Name	a-notate
+Synopsys	a-notate
+.i file
+Description	The script allows you to make annotations of files. The 
+annotations are kept under
+.fix ~/.a-notate
+in files corresponding to the checksum of the file. In an overview
+file, the translation between filenames and checksum is kept.
+
+.h1 Bugs
+
+Everything is a feature, not a bug. My programming is perfect. 
+I deny everything. I did not make any mistakes. etcetera.
+
+Quite a lot is untested.
