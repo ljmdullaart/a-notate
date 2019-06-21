@@ -1,21 +1,15 @@
 #!/bin/bash
 #INSTALL@ /usr/local/bin/a-notate
 
-if [ "$EDITOR" = "" ] ; then
-	my_editor=/usr/bin/vim
-else
-	my_editor="$EDITOR"
+my_editor=${EDITOR:-vim}
+tmpfile=$(mktemp)
+
+if [ ! -d "$HOME/.a-notations" ] ; then
+	mkdir -p "$HOME/.a-notations"
 fi
 
-tmpfile=/tmp/anotate.$$.$RANDOM
-
-
-if [ ! -d ~/.a-notations ] ; then
-	mkdir ~/.a-notations
-fi
-
-if [ ! -f ~/.a-notations/overview ] ; then
-	touch ~/.a-notations/overview
+if [ ! -f "$HOME/.a-notations/overview" ] ; then
+	touch "$HOME/.a-notations/overview"
 fi
 
 
@@ -25,35 +19,36 @@ fi
 # - md5 is available, but filename is not the same
 # - all is new.
 
-file2do=$1
-if [ "$file2do" = "" ] ; then
+if [ -z $1 ] ; then
 	echo "yes, but wich file should I annotate?"
 	exit
+else
+	file2do=$1
 fi
 
 
 checksum=$(md5sum -b "$file2do" | sed 's/ .*//')
 
-if grep "$checksum:$file2do" ~/.a-notations/overview > /dev/null ; then
-	both=ok
+if grep -q "$checksum:$file2do" ~/.a-notations/overview ; then
+	both=true
 else
-	both=nok
+	both=false
 fi
-if grep "$checksum:" ~/.a-notations/overview > /dev/null ; then
-	cks=ok
+if grep -q "$checksum:" ~/.a-notations/overview ; then
+	cks=true
 else
-	cks=nok
+	cks=false
 fi
-if grep ":$file2do" ~/.a-notations/overview > /dev/null ; then
-	fle=ok
+if grep -q ":$file2do" ~/.a-notations/overview ; then
+	fle=true
 else
-	fle=nok
+	fle=false
 fi
 
-if [ $both = ok ] ; then
+if $both ; then
 	$my_editor ~/.a-notations/$checksum
 else
-	if [ $cks = ok ] ; then
+	if $cks  ; then
 		oldfile=$(grep "$checksum:" ~/.a-notations/overview | sed 's/[^:]*://')
 		echo "Hmmm.. this looks like $oldfile"
 		echo "Did you move or copy that file?"
@@ -64,7 +59,7 @@ else
 		echo "$checksum:$file2do">>~/.a-notations/overview
 		$my_editor ~/.a-notations/$checksum
 	else
-		if [ $fle = ok ] ; then
+		if $fle ; then
 			echo "Hmmm.. Seems like the file $file2do has changed"
 			oldcksum=$(grep ":$file2do" ~/.a-notations/overview | sed 's/:.*//')
 			cp ~/.a-notations/$oldcksum ~/.a-notations/$checksum
