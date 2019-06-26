@@ -19,27 +19,27 @@ fi
 # - md5 is available, but filename is not the same
 # - all is new.
 
-if [ -z $1 ] ; then
+if [ -z "$1" ] ; then
 	echo "yes, but wich file should I annotate?"
 	exit
 else
-	file2do=$1
+	file2do=$(realpath "$1")
 fi
 
 
 checksum=$(md5sum -b "$file2do" | sed 's/ .*//')
 
-if grep -q "$checksum:$file2do" ~/.a-notations/overview ; then
+if grep -q "^$checksum:$file2do$" ~/.a-notations/overview ; then
 	both=true
 else
 	both=false
 fi
-if grep -q "$checksum:" ~/.a-notations/overview ; then
+if grep -q "^$checksum:" ~/.a-notations/overview ; then
 	cks=true
 else
 	cks=false
 fi
-if grep -q ":$file2do" ~/.a-notations/overview ; then
+if grep -q ":$file2do$" ~/.a-notations/overview ; then
 	fle=true
 else
 	fle=false
